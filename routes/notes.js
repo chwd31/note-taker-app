@@ -1,52 +1,38 @@
-const router = require('express').Router();
-const fs = require('fs');
+const express = require('express');
+const router = express.Router();
 const path = require('path');
-const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
 
-// Retrieve notes from db.json
-router.get('/notes', (req, res) => {
-  fs.readFile(path.join(__dirname, '../db/db.json'), (err, data) => {
-    if (err) throw err;
-    res.json(JSON.parse(data));
-  });
+router.get('/', (req, res) => {
+  const data = fs.readFileSync('./db/db.json');
+  const notes = JSON.parse(data);
+  res.json(notes);
 });
 
-// Add new note to db.json
-router.post('/notes', (req, res) => {
+router.post('/', (req, res) => {
   const newNote = req.body;
-  const newId = uuidv4();
-  fs.readFile(path.join(__dirname, '../db/db.json'), (err, data) => {
-    if (err) throw err;
-    const notes = JSON.parse(data);
-    const noteWithId = { ...newNote, id: newId };
-    notes.push(noteWithId);
-    fs.writeFile(
-      path.join(__dirname, '../db/db.json'),
-      JSON.stringify(notes),
-      (err) => {
-        if (err) throw err;
-        res.json(noteWithId);
-      }
-    );
-  });
+
+  const data = fs.readFileSync('./db/db.json');
+  const notes = JSON.parse(data);
+
+  notes.push(newNote);
+
+  fs.writeFileSync('./db/db.json', JSON.stringify(notes));
+
+  res.json(newNote);
 });
 
-// Delete a note from db.json
-router.delete('/notes/:id', (req, res) => {
-  const id = req.params.id;
-  fs.readFile(path.join(__dirname, '../db/db.json'), (err, data) => {
-    if (err) throw err;
-    const notes = JSON.parse(data);
-    const filteredNotes = notes.filter((note) => note.id !== id);
-    fs.writeFile(
-      path.join(__dirname, '../db/db.json'),
-      JSON.stringify(filteredNotes),
-      (err) => {
-        if (err) throw err;
-        res.json({ message: 'Note deleted' });
-      }
-    );
-  });
+router.delete('/:id', (req, res) => {
+  const noteId = req.params.id;
+
+  const data = fs.readFileSync('./db/db.json');
+  const notes = JSON.parse(data);
+
+  const filteredNotes = notes.filter((note) => note.id !== noteId);
+
+  fs.writeFileSync('./db/db.json', JSON.stringify(filteredNotes));
+
+  res.json({ message: 'Note deleted' });
 });
 
 module.exports = router;
