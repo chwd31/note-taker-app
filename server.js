@@ -16,46 +16,46 @@ app.use(express.static('public'));
 
 // Routes for HTML pages
 app.get('/', (req, res) =>
-res.sendFile(path.join(__dirname, 'public', 'index.html'))
+res.sendFile(path.join(__dirname, './public/index.html'))
 );
 
 app.get('/notes', (req, res) =>
-  res.sendFile(path.join(__dirname, 'public', 'notes.html'))
+  res.sendFile(path.join(__dirname, './public/notes.html'))
 );
 
 
 // Routes for API
-app.get('/notes', (req, res) => {
-  const data = fs.readFileSync('./db/db.json');
-  const notes = JSON.parse(data);
-  res.json(notes);
-});
+// app.get('/notes', (req, res) => {
+//   const data = fs.readFileSync('./db/db.json');
+//   const notes = JSON.parse(data);
+//   res.json(notes);
+// });
 
-app.post('/notes', (req, res) => {
-  const newNote = req.body;
+// app.post('/notes', (req, res) => {
+//   const newNote = req.body;
 
-  const data = fs.readFileSync('./db/db.json');
-  const notes = JSON.parse(data);
+//   const data = fs.readFileSync('./db/db.json');
+//   const notes = JSON.parse(data);
 
-  notes.push(newNote);
+//   notes.push(newNote);
 
-  fs.writeFileSync('./db/db.json', JSON.stringify(notes));
+//   fs.writeFileSync('./db/db.json', JSON.stringify(notes));
 
-  res.json(newNote);
-});
+//   res.json(newNote);
+// });
 
-app.delete('/notes/:id', (req, res) => {
-  const noteId = req.params.id;
+// app.delete('/notes/:id', (req, res) => {
+//   const noteId = req.params.id;
 
-  const data = fs.readFileSync('./db/db.json');
-  const notes = JSON.parse(data);
+//   const data = fs.readFileSync('./db/db.json');
+//   const notes = JSON.parse(data);
 
-  const filteredNotes = notes.filter((note) => note.id !== noteId);
+//   const filteredNotes = notes.filter((note) => note.id !== noteId);
 
-  fs.writeFileSync('./db/db.json', JSON.stringify(filteredNotes));
+//   fs.writeFileSync('./db/db.json', JSON.stringify(filteredNotes));
 
-  res.json({ message: 'Note deleted' });
-});
+//   res.json({ message: 'Note deleted' });
+// });
 
 // Start the server
 app.listen(PORT, () =>
