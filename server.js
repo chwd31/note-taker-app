@@ -25,13 +25,13 @@ app.get('/notes', (req, res) =>
 
 
 // Routes for API
-app.get('/api/notes', (req, res) => {
+app.get('/routes/notes', (req, res) => {
   const data = fs.readFileSync('./db/db.json');
   const notes = JSON.parse(data);
   res.json(notes);
 });
 
-app.post('/api/notes', (req, res) => {
+app.post('/routes/notes', (req, res) => {
   const newNote = req.body;
 
   const data = fs.readFileSync('./db/db.json');
@@ -44,7 +44,7 @@ app.post('/api/notes', (req, res) => {
   res.json(newNote);
 });
 
-app.delete('/api/notes/:id', (req, res) => {
+app.delete('/routes/notes/:id', (req, res) => {
   const noteId = req.params.id;
 
   const data = fs.readFileSync('./db/db.json');
